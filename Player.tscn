@@ -1,11 +1,62 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://Player.gd" type="Script" id=1]
 [ext_resource path="res://sprites/avatar.png" type="Texture" id=2]
 [ext_resource path="res://sprites/minigun.png" type="Texture" id=3]
+[ext_resource path="res://sfx/shoot.wav" type="AudioStream" id=4]
+[ext_resource path="res://sfx/jump.wav" type="AudioStream" id=5]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 7.29675, 18.174 )
+
+[sub_resource type="Animation" id=4]
+resource_name = "idle"
+length = 2.0
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ 5, 6 ]
+}
+
+[sub_resource type="Animation" id=2]
+resource_name = "land"
+length = 0.8
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.4 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ 3, 4 ]
+}
+
+[sub_resource type="Animation" id=3]
+resource_name = "walk"
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.33, 0.66 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 1,
+"values": [ 0, 1, 2 ]
+}
 
 [node name="Player" type="KinematicBody2D" groups=[
 "player",
@@ -27,7 +78,15 @@ position = Vector2( 0, 5.53393 )
 shape = SubResource( 1 )
 
 [node name="Sprite" type="Sprite" parent="."]
+editor/display_folded = true
 texture = ExtResource( 2 )
+hframes = 7
+frame = 3
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Sprite"]
+anims/idle = SubResource( 4 )
+anims/land = SubResource( 2 )
+anims/walk = SubResource( 3 )
 
 [node name="RayOnEchelleBot" type="RayCast2D" parent="."]
 position = Vector2( 7.30197, 20.1209 )
@@ -61,3 +120,10 @@ collision_mask = 2
 visible = false
 position = Vector2( 8.77051, 13.3193 )
 texture = ExtResource( 3 )
+
+[node name="AudioShoot" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 4 )
+
+[node name="AudioJump" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 5 )
+volume_db = -16.155

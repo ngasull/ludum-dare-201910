@@ -1,13 +1,32 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://EvilOfficer.gd" type="Script" id=1]
 [ext_resource path="res://sprites/evil-soldier.png" type="Texture" id=2]
+[ext_resource path="res://sfx/hurt.wav" type="AudioStream" id=3]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 8.71398, 21.7086 )
 
+[sub_resource type="Animation" id=2]
+resource_name = "walk"
+length = 0.6
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.3 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ 0, 1 ]
+}
+
 [node name="EvilOfficer" type="KinematicBody2D" groups=[
 "officer",
+"shows_bullet_impact",
 ]]
 collision_layer = 32
 collision_mask = 33
@@ -19,6 +38,8 @@ shape = SubResource( 1 )
 
 [node name="Sprite" type="Sprite" parent="."]
 texture = ExtResource( 2 )
+hframes = 3
+frame = 1
 
 [node name="RayOnEchelleTop" type="RayCast2D" parent="."]
 position = Vector2( 8.73789, 2.91947 )
@@ -47,3 +68,10 @@ rotation = 0.349066
 enabled = true
 cast_to = Vector2( 0, 3 )
 collision_mask = 2
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+root_node = NodePath("../Sprite")
+anims/walk = SubResource( 2 )
+
+[node name="AudioHurt" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 3 )

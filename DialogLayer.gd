@@ -17,6 +17,10 @@ func dialog(texts, evil = false, position_overide = get_viewport().size / 8):
     dialog.init(position_overide, text, evil)
     get_tree().paused = true
     add_child(dialog)
+    if evil:
+      $AudioEvil.play()
+    else:
+      $AudioLight.play()
     yield(self, "dialog_accept")
     remove_child(dialog)
     get_tree().paused = false

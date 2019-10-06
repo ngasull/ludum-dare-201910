@@ -14,7 +14,7 @@ var level
 var is_flipped = false
 var is_jumping = false
 var is_running = false
-var flower_count = 0
+var flower_count = 0 setget set_flower_count
 var kill_count = 0
 var velocity = Vector2()
 var bullet_cooldown = 0
@@ -36,6 +36,7 @@ func _process(dt):
       Vector2((-1 if is_flipped else 1) * 15, rand_range(0, -4))
     )
     get_parent().add_child(bullet)
+    $AudioShoot.play()
 
 func _physics_process(dt):
   if Input.is_action_just_pressed("cheat"):
@@ -44,6 +45,7 @@ func _physics_process(dt):
 
   if is_jumping && is_on_floor():
     is_jumping = false
+    $Sprite/AnimationPlayer.play("land")
   elif !is_jumping && velocity.y < 0:
     velocity.y = 0
 
@@ -53,22 +55,30 @@ func _physics_process(dt):
     velocity.x = -get_speed()
     flip_h(true)
 
+    if !is_landing():
+      $Sprite/AnimationPlayer.play("walk")
     if is_on_echelle():
       velocity.y = -get_speed() * 0.5
   elif Input.is_action_pressed("ui_right"):
     velocity.x = get_speed()
     flip_h(false)
+    $Sprite/AnimationPlayer.play("walk")
 
+    if !is_landing():
+      $Sprite/AnimationPlayer.play("walk")
     if is_on_echelle():
       velocity.y = -get_speed() * 0.5
   elif is_on_floor():
     velocity = Vector2()
+    if !is_landing():
+      $Sprite/AnimationPlayer.play("idle")
   else:
     velocity.x = 0
 
   if Input.is_action_just_pressed("ui_accept") && can_jump():
     velocity.y = -JUMP_POWER
     is_jumping = true
+    $AudioJump.play()
 
   velocity = move_and_slide(velocity, Vector2(0, -1))
 
@@ -92,9 +102,18 @@ func can_jump():
 func is_on_echelle():
   return $RayOnEchelleBot.is_colliding() || $RayOnEchelleTop.is_colliding() || $RayOnEchelleBotL.is_colliding() || $RayOnEchelleTopL.is_colliding()
 
+func is_landing():
+  return $Sprite/AnimationPlayer.current_animation == "land" && $Sprite/AnimationPlayer.is_playing()
+
 func say(texts):
   var position_override = get_viewport().size / 8 + Vector2(200, 0)
   yield(dialog_layer.dialog(texts, false, position_override), "completed")
+
+func set_flower_count(new_flower_count):
+  if flower_count == 0 && new_flower_count > 0:
+    $Sprite/AnimationPlayer.playback_speed = 2
+
+  flower_count = new_flower_count
 
 func set_minigun(new_minigun):
   minigun = new_minigun

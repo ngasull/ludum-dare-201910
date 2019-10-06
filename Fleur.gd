@@ -15,6 +15,9 @@ func player_entered(player):
     yield(player.say(["I've never had success in my life..."]), "completed")
     position = player.position + Vector2(3, 3)
     yield(player.say(["But at least I know how\nto enjoy the moment!"]), "completed")
+    queue_free()
+  else:
+    $AudioStreamPlayer.play()
+    $AudioStreamPlayer.connect("finished", self, "queue_free")
 
   player.flower_count += 1
-  queue_free()

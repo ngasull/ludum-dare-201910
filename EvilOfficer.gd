@@ -28,8 +28,10 @@ func _physics_process(dt):
 
   if freeze:
     if is_on_floor():
+      $AnimationPlayer.stop()
       velocity = Vector2(0, 0)
   else:
+    $AnimationPlayer.play("walk")
     if position.direction_to(player.position).x * (-1 if flee else 1) < 0:
       velocity.x = -SPEED
       $Sprite.flip_h = true
@@ -51,6 +53,7 @@ func hit_by_bullet():
   hp -= 1
   if hp < 1:
     queue_free()
+  $AudioHurt.play()
 
 func is_on_echelle():
   return $RayOnEchelleBot.is_colliding() || $RayOnEchelleTop.is_colliding() || $RayOnEchelleBotL.is_colliding() || $RayOnEchelleTopL.is_colliding()
