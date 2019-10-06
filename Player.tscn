@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://Player.gd" type="Script" id=1]
 [ext_resource path="res://sprites/avatar.png" type="Texture" id=2]
+[ext_resource path="res://sprites/minigun.png" type="Texture" id=3]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 7.29675, 18.174 )
@@ -9,12 +10,17 @@ extents = Vector2( 7.29675, 18.174 )
 [node name="Player" type="KinematicBody2D" groups=[
 "player",
 ]]
+collision_mask = 33
 script = ExtResource( 1 )
 
 [node name="Camera2D" type="Camera2D" parent="."]
 offset = Vector2( 0, -10 )
 current = true
 zoom = Vector2( 0.5, 0.5 )
+drag_margin_left = 0.0
+drag_margin_top = 0.1
+drag_margin_right = 0.1
+drag_margin_bottom = 0.1
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2( 0, 5.53393 )
@@ -23,30 +29,18 @@ shape = SubResource( 1 )
 [node name="Sprite" type="Sprite" parent="."]
 texture = ExtResource( 2 )
 
-[node name="RayOnSlope" type="RayCast2D" parent="."]
-position = Vector2( 7.30197, 22.2672 )
-rotation = -1.5708
-enabled = true
-cast_to = Vector2( 0, 2 )
-
-[node name="RayOnSlopeL" type="RayCast2D" parent="."]
-position = Vector2( -7.302, 22.267 )
-rotation = 1.5708
-enabled = true
-cast_to = Vector2( 0, 2 )
-
 [node name="RayOnEchelleBot" type="RayCast2D" parent="."]
 position = Vector2( 7.30197, 20.1209 )
-rotation = -1.5708
+rotation = -0.349066
 enabled = true
-cast_to = Vector2( 0, 2 )
+cast_to = Vector2( 0, 3 )
 collision_mask = 2
 
 [node name="RayOnEchelleBotL" type="RayCast2D" parent="."]
 position = Vector2( -7.302, 20.1209 )
-rotation = 1.5708
+rotation = 0.349066
 enabled = true
-cast_to = Vector2( 0, 2 )
+cast_to = Vector2( 0, 3 )
 collision_mask = 2
 
 [node name="RayOnEchelleTop" type="RayCast2D" parent="."]
@@ -62,3 +56,8 @@ rotation = 1.5708
 enabled = true
 cast_to = Vector2( 0, 2 )
 collision_mask = 2
+
+[node name="Minigun" type="Sprite" parent="."]
+visible = false
+position = Vector2( 8.77051, 13.3193 )
+texture = ExtResource( 3 )
