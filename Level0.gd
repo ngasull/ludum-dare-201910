@@ -95,6 +95,7 @@ func _on_BreakableArea2D_body_entered(body):
       add_child_below_node($Phase1Out, phase1_in)
       $Phase1Out.queue_free()
       $AudioExplosion.play()
+      $Player.shake()
 
 func _on_Phase1BOut_Area2D_body_shape_entered(body_id, body, body_shape, area_shape):
   if body.is_in_group("bullet"):
@@ -103,6 +104,7 @@ func _on_Phase1BOut_Area2D_body_shape_entered(body_id, body, body_shape, area_sh
     if phase1b_hp < 1:
       call_deferred("trigger_phase1b")
       $AudioExplosion.play()
+      $Player.shake()
 
 func trigger_phase1b():
   add_child_below_node($Phase1BOut, phase1b_in)
@@ -115,6 +117,7 @@ func _on_Phase1COut_Area2D_body_shape_entered(body_id, body, body_shape, area_sh
     if phase1c_hp < 1:
       call_deferred("trigger_phase1c")
       $AudioExplosion.play()
+      $Player.shake()
 
 func trigger_phase1c():
   add_child_below_node($Phase1COut, phase1c_in)

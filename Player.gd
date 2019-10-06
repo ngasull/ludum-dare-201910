@@ -7,6 +7,7 @@ const RUN_SPEED = 200
 const FALL_SPEED = 300
 const JUMP_POWER = 300
 const BULLET_DELAY = 0.1
+const SHAKE_TOTAL = 1.5
 
 var dialog_layer
 var level
@@ -18,6 +19,8 @@ var flower_count = 0 setget set_flower_count
 var kill_count = 0
 var velocity = Vector2()
 var bullet_cooldown = 0
+var shake_state = 0
+var shake_side = 1
 var cheat = false
 
 var minigun = false setget set_minigun
@@ -37,6 +40,13 @@ func _process(dt):
     )
     get_parent().add_child(bullet)
     $AudioShoot.play()
+
+  if shake_state > 0:
+    shake_state -= dt
+    shake_side *= -1
+    $Camera2D.position.y = shake_side * 16 * shake_state / SHAKE_TOTAL
+  elif $Camera2D.position.y != 0:
+    $Camera2D.position.y = 0
 
 func _physics_process(dt):
   if Input.is_action_just_pressed("cheat"):
@@ -133,3 +143,6 @@ func hit_by_officer(officer):
       ], true)
   else:
     dialog_layer.dialog(["Flower picking is not as\nbad as killing people. You are\narrested"], true)
+
+func shake():
+  shake_state = SHAKE_TOTAL
